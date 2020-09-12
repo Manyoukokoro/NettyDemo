@@ -1,5 +1,6 @@
 package com.nekotori.client;
 
+import com.nekotori.user.User;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.EventLoopGroup;
@@ -16,6 +17,7 @@ public class Client {
 
     private final String host;
     private final int port;
+    private final User user;
 
     public void start() throws Exception{
         EventLoopGroup group = new NioEventLoopGroup();
@@ -27,7 +29,7 @@ public class Client {
                     .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
-                            socketChannel.pipeline().addLast(new ClientHandler());
+                            socketChannel.pipeline().addLast(new ClientHandler(user));
                         }
                     });
             ChannelFuture channelFuture = bootstrap.connect().sync();
@@ -38,7 +40,4 @@ public class Client {
 
     }
 
-    public static void main(String[] args) throws Exception {
-        new Client("0.0.0.0",8082).start();
-    }
 }
