@@ -2,6 +2,8 @@ package com.nekotori.user;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class UserData {
-    private List<User> userList;
+    private List<User> userList = new ArrayList<User>();
 
     public void addUser(User user){
         userList.add(user);

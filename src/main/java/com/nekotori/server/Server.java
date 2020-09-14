@@ -1,5 +1,6 @@
 package com.nekotori.server;
 
+import com.nekotori.room.Room;
 import com.nekotori.user.User;
 import com.nekotori.user.UserData;
 import io.netty.bootstrap.ServerBootstrap;
@@ -22,14 +23,17 @@ public class Server {
      */
     static int port =8082;
 
-    static UserData userData = new UserData();
+     volatile UserData userData = new UserData();
+     volatile Room chatRoom;
 
-    static {
-        userData.addUser(new User("dengjie","114514"));
-        userData.addUser(new User("zhanglan","444564"));
-    }
 
     public static void main(String[] args) throws Exception {
+
+        final Server server = new Server();
+
+        server.userData.addUser(new User("dengjie","114514"));
+        server.userData.addUser(new User("zhanglan","1223334"));
+        server.chatRoom = new Room("12333");
 
         EventLoopGroup acceptorGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
@@ -39,7 +43,7 @@ public class Server {
             bootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) {
-                            socketChannel.pipeline().addLast(new ServerHandler(userData));
+                            socketChannel.pipeline().addLast(new ServerHandler(server.userData, server.chatRoom));
                         }
                     });
             ChannelFuture channelFuture = bootstrap.bind(Server.port).sync();

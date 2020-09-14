@@ -2,32 +2,35 @@ package com.nekotori.room;
 
 import com.nekotori.user.User;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 
 @RequiredArgsConstructor
-@Data
+@Slf4j
 public class Room implements Serializable {
-    private User user_1;
-    private User user_2;
-
-    String[] infoBuff = new String[2];
-
     @NonNull
-    private String roomId;
+    @Getter
+    @Setter
+    private String id;
 
-    public Boolean addMember(User user){
-        if(user_1==null){
-            user_1=user;
-            return true;
-        }else if(user_2==null){
-            user_2=user;
-            return true;
+    private Map<String,String> message = new HashMap<String, String>();
+
+    public Boolean writeMessage(String userName, String msg){
+        try {
+            message.put(userName, msg);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            return false;
         }
-        return false;
+        return true;
     }
 
+    public String getAndDeleteMessageByUser(String userId){
+            return message.remove(userId);
+    }
 
 
 }
