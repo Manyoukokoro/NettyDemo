@@ -26,8 +26,8 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         ByteBuf in = (ByteBuf)msg;
         log.info("received: "+in.toString(CharsetUtil.UTF_8));
-        Scanner scanner = new Scanner(System.in);
-        ctx.writeAndFlush(Unpooled.copiedBuffer( user.getName()+":"+scanner.nextLine().trim(),CharsetUtil.UTF_8));
+//        Scanner scanner = new Scanner(System.in);
+//        ctx.writeAndFlush(Unpooled.copiedBuffer( user.getName()+":"+scanner.nextLine().trim(),CharsetUtil.UTF_8));
     }
 
     @Override

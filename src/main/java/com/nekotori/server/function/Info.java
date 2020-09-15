@@ -15,4 +15,11 @@ public class Info {
        return ctx.writeAndFlush(Unpooled.copiedBuffer(info, CharsetUtil.UTF_8));
 
     }
+
+    public static ChannelFuture echo(ChannelHandlerContext ctx, String info, boolean withLog){
+        /*没什么意义，简化代码量*/
+        if(withLog) log.info(info);
+        return ctx.writeAndFlush(Unpooled.copiedBuffer(info, CharsetUtil.UTF_8));
+
+    }
 }

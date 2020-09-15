@@ -35,6 +35,7 @@ public class Server {
 
         server.userData.addUser(new User("dengjie","114514"));
         server.userData.addUser(new User("zhanglan","1223334"));
+        server.userData.addUser(new User("nanjinwen","66666666"));
         server.chatRoom = new Room("12333");
 
         EventLoopGroup acceptorGroup = new NioEventLoopGroup();

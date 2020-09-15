@@ -3,6 +3,7 @@ package com.nekotori.server;
 import com.nekotori.room.Room;
 import com.nekotori.server.function.Info;
 import com.nekotori.server.function.PackageChecker;
+import com.nekotori.user.User;
 import com.nekotori.user.UserData;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -26,7 +27,11 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     @NonNull
     private final Room chatRoom;
 
+    private User connectedUser = null;
+
     Boolean connetionFlag = false ;
+
+    Boolean scanMessage = true;
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
@@ -43,19 +48,15 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                     String toUser = packageChecker.getMessage()[1];
                     String message = packageChecker.getMessage()[2];
                     /*如果发信人在库里找不到，就返回错误*/
-                    if (null == userData.findUserById(fromUser)) throw new Exception("from user id not found!");
+                    if (null == userData.findUserByName(fromUser)) throw new Exception("from user id not found!");
 
-                    String tempmsg = chatRoom.getAndDeleteMessageByUser(userData.findUserById(fromUser).getName());
+                    connectedUser = userData.findUserByName(fromUser);
+
+
                     if (null != userData.findUserByName(toUser)) {
-                        chatRoom.writeMessage(toUser, message);
+                        chatRoom.writeMessage(toUser,"from "+fromUser+":"+message);
                     } else {
                         Info.echo(ctx, "User not found!");
-                    }
-
-                    if (null != tempmsg) {
-                        Info.echo(ctx, tempmsg);
-                    } else {
-                        Info.echo(ctx, "there's no message for you");
                     }
                 }else{
                     Info.echo(ctx,"format error");
@@ -68,7 +69,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 
         }else{
             connetionFlag = true;
-            Info.echo(ctx, "waiting:");
+            Info.echo(ctx, "waiting:",false);
         }
     }
 
@@ -84,7 +85,31 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 
 
     @Override
-    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+    public void channelActive(final ChannelHandlerContext ctx) throws Exception {
+    /*channel初始化时开一个线程，一直扫描chatroom，有信息就发给客户端*/
 
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while(scanMessage) {
+                    try {
+                        if(connectedUser!= null){
+                            String tempmsg = chatRoom.getAndDeleteMessageByUser(connectedUser.getName());
+                            if (null != tempmsg) {
+                                Info.echo(ctx, tempmsg,false);
+                            }
+//                            else {
+//                                Info.echo(ctx, "there's no message for you",false);
+//                            }
+                        }
+                        Thread.sleep(500);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                    }
+                }
+        });
+
+        t.start();
     }
 }
