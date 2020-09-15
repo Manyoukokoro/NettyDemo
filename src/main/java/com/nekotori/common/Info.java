@@ -1,4 +1,4 @@
-package com.nekotori.server.function;
+package com.nekotori.common;
 
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;

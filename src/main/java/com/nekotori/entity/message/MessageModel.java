@@ -1,7 +1,5 @@
-package com.nekotori.message;
+package com.nekotori.entity.message;
 
-import com.nekotori.user.User;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 

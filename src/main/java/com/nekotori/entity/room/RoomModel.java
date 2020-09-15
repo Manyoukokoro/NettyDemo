@@ -1,6 +1,5 @@
-package com.nekotori.room;
+package com.nekotori.entity.room;
 
-import com.nekotori.user.User;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
@@ -10,7 +9,7 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 @Slf4j
-public class Room implements Serializable {
+public class RoomModel implements Serializable {
     @NonNull
     @Getter
     @Setter

@@ -1,4 +1,4 @@
-package com.nekotori.user;
+package com.nekotori.entity.user;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,10 +13,10 @@ import java.util.List;
 
 @NoArgsConstructor
 @Data
-public class UserData {
-    private List<User> userList = new ArrayList<User>();
+public class UserList {
+    private List<UserModel> userList = new ArrayList<UserModel>();
 
-    public void addUser(User user){
+    public void addUser(UserModel user){
         userList.add(user);
     }
 
@@ -25,21 +25,21 @@ public class UserData {
      * @param id
      * @return
      */
-    public User findUserById(String id){
-        for(User user:userList){
+    public UserModel findUserById(String id){
+        for(UserModel user:userList){
             if(user.getId().equals(id)) return user;
         }
         return null;
     }
 
-    public User findUserByName(String name){
-        for(User user:userList){
+    public UserModel findUserByName(String name){
+        for(UserModel user:userList){
             if(user.getName().equals(name)) return user;
         }
         return null;
     }
 
-    public void deleteUser(User user){
+    public void deleteUser(UserModel user){
         userList.remove(user);
     }
 

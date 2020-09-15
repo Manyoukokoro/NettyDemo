@@ -1,12 +1,10 @@
-package com.nekotori.server.function;
+package com.nekotori.common;
 
-import com.nekotori.message.MessageModel;
+import com.nekotori.entity.message.MessageModel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.Arrays;
 
 @RequiredArgsConstructor
 @Slf4j

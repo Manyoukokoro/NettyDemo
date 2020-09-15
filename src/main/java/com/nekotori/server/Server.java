@@ -1,8 +1,8 @@
 package com.nekotori.server;
 
-import com.nekotori.room.Room;
-import com.nekotori.user.User;
-import com.nekotori.user.UserData;
+import com.nekotori.entity.room.RoomModel;
+import com.nekotori.entity.user.UserModel;
+import com.nekotori.entity.user.UserList;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -23,20 +23,20 @@ public class Server {
      * 希望程序没事
      */
      @Getter
-     private int port =8082;
+     private final int port =8082;
 
-     volatile UserData userData = new UserData();
-     volatile Room chatRoom;
+     volatile UserList userData = new UserList();
+     volatile RoomModel chatRoom;
 
 
     public static void main(String[] args) throws Exception {
 
         final Server server = new Server();
 
-        server.userData.addUser(new User("dengjie","114514"));
-        server.userData.addUser(new User("zhanglan","1223334"));
-        server.userData.addUser(new User("nanjinwen","66666666"));
-        server.chatRoom = new Room("12333");
+        server.userData.addUser(new UserModel("dengjie","114514"));
+        server.userData.addUser(new UserModel("zhanglan","1223334"));
+        server.userData.addUser(new UserModel("nanjinwen","66666666"));
+        server.chatRoom = new RoomModel("12333");
 
         EventLoopGroup acceptorGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();

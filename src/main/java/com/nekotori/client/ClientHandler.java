@@ -1,6 +1,6 @@
 package com.nekotori.client;
 
-import com.nekotori.user.User;
+import com.nekotori.entity.user.UserModel;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
@@ -12,15 +12,13 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Scanner;
-
 @Slf4j(topic = "Client")
 @RequiredArgsConstructor
 @NoArgsConstructor
 public class ClientHandler extends ChannelInboundHandlerAdapter {
 
     @NonNull
-    private User user;
+    private UserModel user;
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {

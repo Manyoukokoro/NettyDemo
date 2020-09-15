@@ -1,4 +1,4 @@
-package com.nekotori.user;
+package com.nekotori.entity.user;
 
 import lombok.Data;
 import lombok.NonNull;
@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 @RequiredArgsConstructor
 @Data
-public class User implements Serializable {
+public class UserModel implements Serializable {
     @NonNull
     private String name;
 

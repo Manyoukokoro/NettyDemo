@@ -1,6 +1,6 @@
 package com.nekotori.client;
 
-import com.nekotori.user.User;
+import com.nekotori.entity.user.UserModel;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
@@ -15,7 +15,6 @@ import io.netty.util.CharsetUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.nio.ByteBuffer;
 import java.util.Scanner;
 
 @AllArgsConstructor
@@ -24,7 +23,7 @@ public class Client {
 
     private final String host;
     private final int port;
-    private final User user;
+    private final UserModel user;
 
     public void start() throws Exception{
         EventLoopGroup group = new NioEventLoopGroup();

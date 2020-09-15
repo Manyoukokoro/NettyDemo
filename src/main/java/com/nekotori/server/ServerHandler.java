@@ -1,15 +1,14 @@
 package com.nekotori.server;
 
-import com.nekotori.message.MessageModel;
-import com.nekotori.room.Room;
-import com.nekotori.server.function.Info;
-import com.nekotori.server.function.PackageChecker;
-import com.nekotori.user.User;
-import com.nekotori.user.UserData;
+import com.nekotori.entity.message.MessageModel;
+import com.nekotori.entity.room.RoomModel;
+import com.nekotori.common.Info;
+import com.nekotori.common.PackageChecker;
+import com.nekotori.entity.user.UserModel;
+import com.nekotori.entity.user.UserList;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
-import io.netty.channel.MessageSizeEstimator;
 import io.netty.util.CharsetUtil;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -24,12 +23,12 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class ServerHandler extends ChannelInboundHandlerAdapter {
     @NonNull
-    private final UserData userData;
+    private final UserList userData;
 
     @NonNull
-    private final Room chatRoom;
+    private final RoomModel chatRoom;
 
-    private User connectedUser = null;
+    private UserModel connectedUser = null;
 
     Boolean connetionFlag = false ;
 
@@ -82,8 +81,17 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     }
 
     @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        super.channelInactive(ctx);
+        connetionFlag = false;
+        scanMessage = false;
+    }
+
+    @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        super.exceptionCaught(ctx, cause);
+        log.error("client shutdown!");
+        connetionFlag = false;
+        scanMessage = false;
     }
 
 
