@@ -9,6 +9,7 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,7 +22,8 @@ public class Server {
     /**
      * 希望程序没事
      */
-    static int port =8082;
+     @Getter
+     private int port =8082;
 
      volatile UserData userData = new UserData();
      volatile Room chatRoom;
@@ -43,13 +45,14 @@ public class Server {
             bootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) {
-                            socketChannel.pipeline().addLast(new ServerHandler(server.userData, server.chatRoom));
+                            socketChannel.pipeline().addLast("ServerHandler",new ServerHandler(server.userData, server.chatRoom));
                         }
                     });
-            ChannelFuture channelFuture = bootstrap.bind(Server.port).sync();
+            ChannelFuture channelFuture = bootstrap.bind(server.getPort()).sync();
             log.info("Server started!");
             channelFuture.channel().closeFuture().sync();
         }finally {
+            /*退出两个Group*/
             acceptorGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
         }
