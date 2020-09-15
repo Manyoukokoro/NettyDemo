@@ -1,5 +1,6 @@
 package com.nekotori.server;
 
+import com.nekotori.message.MessageModel;
 import com.nekotori.room.Room;
 import com.nekotori.server.function.Info;
 import com.nekotori.server.function.PackageChecker;
@@ -8,6 +9,7 @@ import com.nekotori.user.UserData;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.MessageSizeEstimator;
 import io.netty.util.CharsetUtil;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -44,9 +46,10 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 
                 PackageChecker packageChecker = new PackageChecker(smsg).check();
                 if(packageChecker.isValid()) {
-                    String fromUser = packageChecker.getMessage()[0];
-                    String toUser = packageChecker.getMessage()[1];
-                    String message = packageChecker.getMessage()[2];
+                    MessageModel messageModel = packageChecker.getMessage();
+                    String fromUser = messageModel.getFromUser();
+                    String toUser = messageModel.getToUser();
+                    String message = messageModel.getMessage();
                     /*如果发信人在库里找不到，就返回错误*/
                     if (null == userData.findUserByName(fromUser)) throw new Exception("from user id not found!");
 

@@ -1,5 +1,6 @@
 package com.nekotori.server.function;
 
+import com.nekotori.message.MessageModel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -12,8 +13,10 @@ import java.util.Arrays;
 public class PackageChecker {
 
     @NonNull
-    private String message;
-    private String[] messageDivided = new String[3];
+    private final String message;
+
+    private MessageModel mModel;
+//    private String[] messageDivided = new String[3];
 
     @Getter
     private boolean isValid = false;
@@ -23,15 +26,20 @@ public class PackageChecker {
         String[] tempMessage = message.split(":",3);
         if(tempMessage.length==3){
             PackageChecker packageCheck = new PackageChecker(message);
-            packageCheck.messageDivided = Arrays.copyOf(tempMessage,3);
+            packageCheck.mModel = MessageModel.builder()
+                                                .fromUser(tempMessage[0])
+                                                .toUser(tempMessage[1])
+                                                .message(tempMessage[2])
+                                                .build();
+//            packageCheck.messageDivided = Arrays.copyOf(tempMessage,3);
             packageCheck.isValid = true;
             return  packageCheck;
         }
         return new PackageChecker(message);
     }
 
-    public String[] getMessage(){
-        return messageDivided;
+    public MessageModel getMessage(){
+        return mModel;
     }
 
 }
