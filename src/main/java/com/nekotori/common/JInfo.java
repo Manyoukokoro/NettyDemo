@@ -7,7 +7,7 @@ import io.netty.util.CharsetUtil;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j(topic = "server")
-public class Info {
+public class JInfo {
 
     public static ChannelFuture echo(ChannelHandlerContext ctx, String info){
         /*没什么意义，简化代码量*/

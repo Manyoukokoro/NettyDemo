@@ -1,8 +1,9 @@
 package com.nekotori.server;
 
+import com.nekotori.common.KInfo;
 import com.nekotori.entity.message.MessageModel;
 import com.nekotori.entity.room.RoomModel;
-import com.nekotori.common.Info;
+import com.nekotori.common.JInfo;
 import com.nekotori.common.PackageChecker;
 import com.nekotori.entity.user.UserModel;
 import com.nekotori.entity.user.UserList;
@@ -24,7 +25,6 @@ import lombok.extern.slf4j.Slf4j;
 public class ServerHandler extends ChannelInboundHandlerAdapter {
     @NonNull
     private final UserList userData;
-
     @NonNull
     private final RoomModel chatRoom;
 
@@ -58,20 +58,20 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                     if (null != userData.findUserByName(toUser)) {
                         chatRoom.writeMessage(toUser,"from "+fromUser+":"+message);
                     } else {
-                        Info.echo(ctx, "User not found!");
+                        JInfo.echo(ctx, "User not found!");
                     }
                 }else{
-                    Info.echo(ctx,"format error");
+                    JInfo.echo(ctx,"format error");
                 }
 
             } catch (Exception e) {
                 log.info(e.getMessage());
-                Info.echo(ctx,"message format error!");
+                JInfo.echo(ctx,"message format error!");
             }
 
         }else{
             connetionFlag = true;
-            Info.echo(ctx, "waiting:",false);
+            JInfo.echo(ctx,"waiting:",false);
         }
     }
 
@@ -107,7 +107,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                         if(connectedUser!= null){
                             String tempmsg = chatRoom.getAndDeleteMessageByUser(connectedUser.getName());
                             if (null != tempmsg) {
-                                Info.echo(ctx, tempmsg,false);
+                                JInfo.echo(ctx, tempmsg,false);
                             }
 //                            else {
 //                                Info.echo(ctx, "there's no message for you",false);
