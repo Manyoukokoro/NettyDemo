@@ -5,16 +5,13 @@ import com.nekotori.entity.user.UserModel;
 import com.nekotori.entity.user.UserList;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 /**
- * auther: nekotori
+ * author: nekotori
  */
 @Slf4j(topic = "Server")
 @NoArgsConstructor
@@ -42,13 +39,9 @@ public class Server {
         EventLoopGroup workerGroup = new NioEventLoopGroup();
 
         try{
-            ServerBootstrap bootstrap = new MyBootstrap(acceptorGroup, workerGroup).generateBootstrap();
-            bootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
-                        @Override
-                        protected void initChannel(SocketChannel socketChannel) {
-                            socketChannel.pipeline().addLast("ServerHandler",new ServerHandler(server.userData, server.chatRoom));
-                        }
-                    });
+            ServerBootstrap bootstrap = new MyBootstrapGenerator(acceptorGroup, workerGroup).generateBootstrap();
+            bootstrap.childHandler(new MyChannelInitializer(server.userData, server.chatRoom));
+
             ChannelFuture channelFuture = bootstrap.bind(server.getPort()).sync();
             log.info("Server started!");
             channelFuture.channel().closeFuture().sync();

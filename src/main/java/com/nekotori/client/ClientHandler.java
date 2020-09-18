@@ -1,5 +1,7 @@
 package com.nekotori.client;
 
+import com.nekotori.entity.message.Message;
+import com.nekotori.entity.message.MessageModel;
 import com.nekotori.entity.user.UserModel;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -22,8 +24,8 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        ByteBuf in = (ByteBuf)msg;
-        log.info("received: "+in.toString(CharsetUtil.UTF_8));
+        Message in = (Message) msg;
+        log.info("received: "+in.getBody());
 //        Scanner scanner = new Scanner(System.in);
 //        ctx.writeAndFlush(Unpooled.copiedBuffer( user.getName()+":"+scanner.nextLine().trim(),CharsetUtil.UTF_8));
     }
@@ -40,8 +42,8 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-         ChannelFuture cf = ctx.writeAndFlush(Unpooled.copiedBuffer("Connection Established!"+user.getName(),
-                                                                                    CharsetUtil.UTF_8));
+        Message message= MessageModel.builder().fromUser(user.getName()).toUser("server").message("Connection Established!").build();
+         ChannelFuture cf = ctx.writeAndFlush(message);
          if(cf.isSuccess()) {
              log.info("Connect to server success! ");
              log.info("login as:"+user.getName());

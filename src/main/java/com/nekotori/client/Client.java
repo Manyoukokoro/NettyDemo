@@ -1,5 +1,9 @@
 package com.nekotori.client;
 
+import com.nekotori.code.MyDecoderImpl;
+import com.nekotori.code.MyEncoderImpl;
+import com.nekotori.entity.message.Message;
+import com.nekotori.entity.message.MessageModel;
 import com.nekotori.entity.user.UserModel;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -35,7 +39,10 @@ public class Client {
                     .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
-                            socketChannel.pipeline().addLast(new ClientHandler(user));
+                            socketChannel.pipeline().
+                                    addLast(new MyEncoderImpl()).
+                                    addLast(new MyDecoderImpl()).
+                                    addLast(new ClientHandler(user));
                         }
                     });
             ChannelFuture channelFuture = bootstrap.connect().sync();
@@ -45,11 +52,19 @@ public class Client {
             Scanner scan = new Scanner(System.in);
             System.out.println("chat to whom?");
             String connectionInfo = scan.nextLine();
-            ByteBuf preMessage = Unpooled.copiedBuffer(user.getName()+":"+connectionInfo+":connected",CharsetUtil.UTF_8);
+            Message m = MessageModel.builder().fromUser(user.getName()).
+                    toUser(connectionInfo).
+                    message("connection test").
+                    build();
             System.out.println("waiting for response.");
-            ch.writeAndFlush(preMessage);
+            ch.writeAndFlush(m);
             while(true){
-                ch.writeAndFlush(Unpooled.copiedBuffer(user.getName()+":"+connectionInfo+":"+scan.nextLine(), CharsetUtil.UTF_8));
+
+                ch.writeAndFlush(MessageModel.builder().
+                        fromUser(user.getName()).
+                        toUser(connectionInfo).
+                        message(scan.nextLine()).
+                        build());
             }
 
         }finally {

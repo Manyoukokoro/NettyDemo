@@ -14,7 +14,7 @@ import java.util.Properties;
 
 @Slf4j
 @RequiredArgsConstructor
-public class MyBootstrap {
+public class MyBootstrapGenerator {
 
     @NonNull
     EventLoopGroup acceptor;

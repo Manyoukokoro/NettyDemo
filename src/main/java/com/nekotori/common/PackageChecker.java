@@ -24,11 +24,11 @@ public class PackageChecker {
         String[] tempMessage = message.split(":",3);
         if(tempMessage.length==3){
             PackageChecker packageCheck = new PackageChecker(message);
-            packageCheck.mModel = MessageModel.builder()
-                                                .fromUser(tempMessage[0])
-                                                .toUser(tempMessage[1])
-                                                .message(tempMessage[2])
-                                                .build();
+            packageCheck.mModel = MessageModel.builder().
+                                                fromUser(tempMessage[0]).
+                                                toUser(tempMessage[1]).
+                                                message(tempMessage[2]).
+                                                build();
 //            packageCheck.messageDivided = Arrays.copyOf(tempMessage,3);
             packageCheck.isValid = true;
             return  packageCheck;

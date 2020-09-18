@@ -10,30 +10,44 @@ import java.io.Serializable;
  */
 @Data
 @Builder
-public class MessageModel implements Serializable {
+public class MessageModel implements Message{
 
     private String fromUser;
     private String toUser;
     private String message;
 
+
+    @Override
+    public String getSender() {
+        return fromUser;
+    }
+
+    @Override
+    public String getRecipient() {
+        return toUser;
+    }
+
+    @Override
+    public String getBody() {
+        return message;
+    }
+
 //    public static class builder{
-//        private String bfromUser;
-//        private String btoUser;
-//        private String bmessage;
+//        private MessageModel target;
 //        public builder fromUser(String fromUser){
-//            bfromUser = fromUser;
+//            this.target.fromUser = fromUser;
 //            return this;
 //        }
 //        public builder toUser(String toUser){
-//            btoUser = toUser;
+//            this.target.toUser = toUser;
 //            return this;
 //        }
 //        public  builder message(String message){
-//            bmessage = message;
+//            this.target.message = message;
 //            return this;
 //        }
 //        public MessageModel build(){
-//            return new MessageModel(bfromUser,btoUser,bmessage);
+//            return this.target;
 //        }
 //
 //    }
